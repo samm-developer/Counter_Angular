@@ -14,53 +14,41 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have two labels', () => {
+  it('should start at zero', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.labels).toEqual(['Player A', 'Player B']);
+    expect(app.count()).toBe(0);
   });
 
-  it('should start both counters at zero', () => {
+  it('should increment and decrement the count', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.counts()).toEqual([0, 0]);
+
+    app.increment();
+    app.increment();
+    expect(app.count()).toBe(2);
+
+    app.decrement();
+    expect(app.count()).toBe(1);
   });
 
-  it('should increment and decrement a counter by index', () => {
+  it('should reset the count', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
-    app.increment(0);
-    app.increment(0);
-    expect(app.counts()[0]).toBe(2);
-
-    app.decrement(0);
-    expect(app.counts()[0]).toBe(1);
-    expect(app.counts()[1]).toBe(0);
+    app.increment();
+    app.reset();
+    expect(app.count()).toBe(0);
   });
 
-  it('should reset a single counter', () => {
+  it('should render the current count', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
-    app.increment(1);
-    app.increment(1);
-    app.reset(1);
-
-    expect(app.counts()).toEqual([0, 0]);
-  });
-
-  it('should render both counters independently', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-
-    app.increment(0);
-    app.increment(1);
-    app.increment(1);
+    app.increment();
     fixture.detectChanges();
 
-    const values = fixture.nativeElement.querySelectorAll('.counter-value');
-    expect(values[0].textContent).toContain('1');
-    expect(values[1].textContent).toContain('2');
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.counter-value')?.textContent).toContain('1');
   });
 });
