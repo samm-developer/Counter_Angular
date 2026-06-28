@@ -1,30 +1,48 @@
 <main class="counter-app">
-  <section class="counter-card" aria-labelledby="counter-heading">
-    <header class="counter-header">
-      <h1 id="counter-heading">Counter</h1>
-      <p class="counter-subtitle">Tap the buttons to change the value</p>
-    </header>
+  <header class="page-header">
+    <h1>Counter</h1>
+    <p class="page-subtitle">Each label has its own counter</p>
+  </header>
 
-    <div class="counter-display" aria-live="polite" aria-atomic="true">
-      <span class="counter-value">{{ count() }}</span>
-    </div>
+  <div class="counter-grid">
+    @for (label of labels; track label; let i = $index) {
+      <section class="counter-card" [attr.aria-labelledby]="'counter-heading-' + i">
+        <header class="counter-header">
+          <h2 [id]="'counter-heading-' + i">{{ label }}</h2>
+        </header>
 
-    <div class="counter-actions">
-      <button type="button" class="btn btn-decrement" (click)="decrement()" aria-label="Decrease count">
-        −
-      </button>
-      <button
-        type="button"
-        class="btn btn-reset"
-        (click)="reset()"
-        [disabled]="isZero()"
-        aria-label="Reset count"
-      >
-        Reset
-      </button>
-      <button type="button" class="btn btn-increment" (click)="increment()" aria-label="Increase count">
-        +
-      </button>
-    </div>
-  </section>
+        <div class="counter-display" aria-live="polite" aria-atomic="true">
+          <span class="counter-value">{{ counts()[i] }}</span>
+        </div>
+
+        <div class="counter-actions">
+          <button
+            type="button"
+            class="btn btn-decrement"
+            (click)="decrement(i)"
+            [attr.aria-label]="'Decrease count for ' + label"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            class="btn btn-reset"
+            (click)="reset(i)"
+            [disabled]="isZero(i)"
+            [attr.aria-label]="'Reset count for ' + label"
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            class="btn btn-increment"
+            (click)="increment(i)"
+            [attr.aria-label]="'Increase count for ' + label"
+          >
+            +
+          </button>
+        </div>
+      </section>
+    }
+  </div>
 </main>

@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +7,28 @@ import { Component, computed, signal } from '@angular/core';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  readonly count = signal(0);
-  readonly isZero = computed(() => this.count() === 0);
+  readonly labels = ['Player A', 'Player B'];
+  readonly counts = signal<number[]>([0, 0]);
 
-  increment(): void {
-    this.count.update((value) => value + 1);
+  increment(index: number): void {
+    this.counts.update((values) =>
+      values.map((value, i) => (i === index ? value + 1 : value)),
+    );
   }
 
-  decrement(): void {
-    this.count.update((value) => value - 1);
+  decrement(index: number): void {
+    this.counts.update((values) =>
+      values.map((value, i) => (i === index ? value - 1 : value)),
+    );
   }
 
-  reset(): void {
-    this.count.set(0);
+  reset(index: number): void {
+    this.counts.update((values) =>
+      values.map((value, i) => (i === index ? 0 : value)),
+    );
+  }
+
+  isZero(index: number): boolean {
+    return this.counts()[index] === 0;
   }
 }

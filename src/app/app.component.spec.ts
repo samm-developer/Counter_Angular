@@ -14,41 +14,53 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should start at zero', () => {
+  it('should have two labels', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.count()).toBe(0);
+    expect(app.labels).toEqual(['Player A', 'Player B']);
   });
 
-  it('should increment and decrement the count', () => {
+  it('should start both counters at zero', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-
-    app.increment();
-    app.increment();
-    expect(app.count()).toBe(2);
-
-    app.decrement();
-    expect(app.count()).toBe(1);
+    expect(app.counts()).toEqual([0, 0]);
   });
 
-  it('should reset the count', () => {
+  it('should increment and decrement a counter by index', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
-    app.increment();
-    app.reset();
-    expect(app.count()).toBe(0);
+    app.increment(0);
+    app.increment(0);
+    expect(app.counts()[0]).toBe(2);
+
+    app.decrement(0);
+    expect(app.counts()[0]).toBe(1);
+    expect(app.counts()[1]).toBe(0);
   });
 
-  it('should render the current count', () => {
+  it('should reset a single counter', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
 
-    app.increment();
+    app.increment(1);
+    app.increment(1);
+    app.reset(1);
+
+    expect(app.counts()).toEqual([0, 0]);
+  });
+
+  it('should render both counters independently', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+
+    app.increment(0);
+    app.increment(1);
+    app.increment(1);
     fixture.detectChanges();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.counter-value')?.textContent).toContain('1');
+    const values = fixture.nativeElement.querySelectorAll('.counter-value');
+    expect(values[0].textContent).toContain('1');
+    expect(values[1].textContent).toContain('2');
   });
 });
